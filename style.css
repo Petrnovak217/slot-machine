@@ -95,3 +95,7 @@ button:hover {
     color: #ffcc00; 
     border: 2px solid #ff9900; 
 }
+
+.win-lose-conatiner{
+    font-size: 25px;
+}

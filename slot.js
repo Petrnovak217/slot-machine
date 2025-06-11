@@ -63,7 +63,7 @@ const getNumberOfLines = () => {
     if (!isNaN(numberOflines) && numberOflines > 0 && numberOflines <= 3) {    
         return numberOflines;
     } else {
-        error.textContent = "Invalid number of lines";
+        error.textContent = "Neplatné číslo dodržte rozsah (1-3)";
         return null;
     }
 };
@@ -73,8 +73,8 @@ const getBet = (balance, lines) => {
     let numberOfBet = Number(parseFloat(betInput).toFixed(2));  
 
     // Kontrola, zda hráč má dostatek peněz před odečtením
-    if (!isNaN(numberOfBet) && numberOfBet > 0 && numberOfBet <= balance/lines) {
-        if (player.balance - numberOfBet >= 0) {  
+    if (!isNaN(numberOfBet) && numberOfBet > 0 ) {
+        if (player.balance - numberOfBet >= 0 && numberOfBet <= balance/lines) {  
             player.balance -= numberOfBet * lines;  
             depositCapital.innerHTML = player.balance;
             return numberOfBet;
@@ -83,7 +83,7 @@ const getBet = (balance, lines) => {
             return null;
         }
     } else {
-        error.textContent = "Invalid bet";
+        error.textContent = "Nevhodná částka";
         return null;
     }
 };
@@ -164,10 +164,6 @@ const getWinnings = (rows, bet, lines) => {
             })
 
             winnings += Number((bet * SYMBOL_VALUES[firstSymbol]).toFixed(2));  
-            winLoseContainer.textContent ="Vyhrál si";
-
-        }else{
-            winLoseContainer.textContent ="Prohrál si";
         }
 
         
@@ -189,6 +185,7 @@ function game(event) {
         const rows = transpose(reels);
         printRows(rows);
         const winnings = getWinnings(rows,bet,numberOflines);
+        winLoseContainer.textContent = winnings > 0 ? `Vyhrál si: ${winnings}` : "Prohrál si";
     }
 }
 
