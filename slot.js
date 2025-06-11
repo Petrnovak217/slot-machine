@@ -1,5 +1,5 @@
 const getDepositeBtn = document.getElementById("btn");
-document.getElementById("depositForm").addEventListener("submit", handleDeposit);
+document.getElementById("betForm").addEventListener("submit", handleDeposit);
 
 class Player {
     constructor(name, balance = 0) {
@@ -50,22 +50,11 @@ getDepositeBtn.addEventListener("click", () => {
     player.deposit();
 });
 
-
-function handleDeposit(event) {
-    event.preventDefault(); 
-
-    let numberOflines = getNumberOfLines();
-    if (numberOflines !== null) {
-        const bet = getBet(player.balance, numberOflines);
-        console.log("Bet:", bet);
-    }
-}
-
 const getNumberOfLines = () => {
     const lines = document.getElementById("numberSlot").value; 
     let numberOflines = parseFloat(lines);
 
-    if (!isNaN(numberOflines) && numberOflines > 0 && numberOflines < 3) {    
+    if (!isNaN(numberOflines) && numberOflines > 0 && numberOflines <= 3) {    
         return numberOflines;
     } else {
         console.log("Invalid number of lines");
@@ -139,33 +128,44 @@ const printRows = (rows) =>{
     }
 }
 
-const getWinnigs = (rows,bet,lines) =>{
-    let winnigs = 0;
+const getWinnings = (rows, bet, lines) => {
+    let winnings = 0;
 
-    for(let row =0; row < lines; row++){
+    for (let row = 0; row < lines; row++) {
         const symbols = rows[row];
-        let allSame = true;
+        let firstSymbol = symbols[0];  
+        let allSame = symbols.every(symbol => symbol === firstSymbol);  
 
-        for(const symbol of symbols){
-            if(symbol != symbol[0]){
-                allSame = false;
-                break;
-            }
-        }
-
-        if(allSame){
-            winnigs += bet * SYMBOL_VALUES[symbols[0]];
+        if (allSame) {
+            winnings += (bet * SYMBOL_VALUES[firstSymbol])/lines;  
         }
     }
 
-    return winnigs;
+    return winnings;
+};
+
+
+function handleDeposit(event) {
+    event.preventDefault(); 
+
+    let numberOflines = getNumberOfLines();
+    const bet = getBet(player.balance, numberOflines);
+
+    if (numberOflines !==null && bet !==null) {
+        const reels = spin();
+        const rows = transpose(reels);
+        printRows(rows);
+        const winnings = getWinnings(rows,bet,numberOflines);
+        console.log(`You ${player.name} won ${winnings}$`)
+    }
 }
 
-let numberOflines = getNumberOfLines();
-const bet = getBet(player.balance, numberOflines);
-const reels = spin();
-const rows = transpose(reels);
-printRows(rows);
+
+
+
+
+
+
 
 
 
