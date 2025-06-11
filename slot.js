@@ -111,11 +111,31 @@ const spin = () =>{
     return reels;
 }
 
-const reels = spin();
-console.log(reels);
+const transpose = (reels) =>{
+    const rows = [];
+
+    for(let i =0; i < ROWS ;i++){
+        rows.push([]);
+
+        for(let j =0; j < COLS;j++){
+            rows[i].push(reels[j][i]);
+        }
+    }
+
+    return rows;
+}
+
 
 let numberOflines = getNumberOfLines();
-if (numberOflines !== null) {
-    const bet = getBet(player.balance, numberOflines);
-    console.log(bet)
-}
+const bet = getBet(player.balance, numberOflines);
+console.log(bet)
+const reels = spin();
+const rows = transpose(reels);
+
+console.log(reels);
+console.log(rows);
+
+
+
+
+
