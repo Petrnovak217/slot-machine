@@ -1,5 +1,5 @@
 const getDepositeBtn = document.getElementById("btn");
-document.getElementById("betForm").addEventListener("submit", handleDeposit);
+document.getElementById("betForm").addEventListener("submit", game);
 
 class Player {
     constructor(name, balance = 0) {
@@ -9,10 +9,10 @@ class Player {
 
     deposit() {
         const depositInput = document.getElementById("deposit").value;
-        let numberDepositeAmount = parseFloat(depositInput);
+        let numberDepositeAmount = depositInput;
 
         if (!isNaN(numberDepositeAmount) && numberDepositeAmount > 0) {  
-            this.balance += numberDepositeAmount;
+            this.balance += Number(numberDepositeAmount);
             console.log(`Deposited: ${numberDepositeAmount}, New Balance: ${this.balance}`);
         } else {
             console.log("Invalid deposit amount, try again");
@@ -52,7 +52,7 @@ getDepositeBtn.addEventListener("click", () => {
 
 const getNumberOfLines = () => {
     const lines = document.getElementById("numberSlot").value; 
-    let numberOflines = parseFloat(lines);
+    let numberOflines = Number(lines);
 
     if (!isNaN(numberOflines) && numberOflines > 0 && numberOflines <= 3) {    
         return numberOflines;
@@ -64,10 +64,17 @@ const getNumberOfLines = () => {
 
 const getBet = (balance, lines) => {
     const betInput = document.getElementById("bet").value; 
-    let numberOfBet = parseFloat(betInput);
+    let numberOfBet = Number(parseFloat(betInput).toFixed(2));  
 
-    if (!isNaN(numberOfBet) && numberOfBet > 0 && numberOfBet <= balance / lines) {
-        return numberOfBet;
+    // Kontrola, zda hráč má dostatek peněz před odečtením
+    if (!isNaN(numberOfBet) && numberOfBet > 0 && numberOfBet <= balance/lines) {
+        if (player.balance - numberOfBet >= 0) {  
+            player.balance -= numberOfBet * lines;  
+            return numberOfBet;
+        } else {
+            console.log("Nedostatečný zůstatek! Nemůžeš vsadit tolik.");
+            return null;
+        }
     } else {
         console.log("Invalid bet");
         return null;
@@ -119,7 +126,7 @@ const printRows = (rows) =>{
     for(const row of rows){
         let rowString = "";
 
-        for(const [i,symbol] of rows.entries()){
+        for(const [i,symbol] of row.entries()){
             rowString += `|${symbol}|\n`
            
         }
@@ -137,26 +144,27 @@ const getWinnings = (rows, bet, lines) => {
         let allSame = symbols.every(symbol => symbol === firstSymbol);  
 
         if (allSame) {
-            winnings += (bet * SYMBOL_VALUES[firstSymbol])/lines;  
+            winnings += Number((bet * SYMBOL_VALUES[firstSymbol]).toFixed(2));  
         }
     }
-
+    player.balance += winnings;
     return winnings;
 };
 
 
-function handleDeposit(event) {
+function game(event) {
     event.preventDefault(); 
 
     let numberOflines = getNumberOfLines();
     const bet = getBet(player.balance, numberOflines);
 
     if (numberOflines !==null && bet !==null) {
+        console.log(player.balance.toFixed(2));
         const reels = spin();
         const rows = transpose(reels);
         printRows(rows);
         const winnings = getWinnings(rows,bet,numberOflines);
-        console.log(`You ${player.name} won ${winnings}$`)
+        console.log(`You ${player.name} won ${winnings.toFixed(2)}$`)  
     }
 }
 
