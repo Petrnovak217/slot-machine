@@ -25,6 +25,7 @@ class Player {
 const ROWS = 3;
 const COLS = 3;
 
+//How many symbols are there in the slots
 const SYMBOLS_COUNT = {
     "A":2,
     "B":4,
@@ -32,6 +33,14 @@ const SYMBOLS_COUNT = {
     "D":8
 } 
 
+//multiplying values ​​in a slot
+
+const SYMBOL_VALUES = {
+    "A":2,
+    "B":4,
+    "C":3,
+    "D":2
+}
 
 
 const player = new Player("Petr");
@@ -75,6 +84,35 @@ const getBet = (balance, lines) => {
         return null;
     }
 };
+
+const spin = () =>{
+    const symbols = [];
+
+    for(const [symbol,count] of Object.entries(SYMBOLS_COUNT)){
+       for(let i = 0; i < count;i++){
+            symbols.push(symbol);
+       }
+    }
+    console.log(symbols);
+   
+    const reels = []
+    for (let i = 0;i < COLS;i++){
+        reels.push([]);
+        const reelSymbols = [...symbols];
+
+        for (let j =0; j < ROWS;j++){
+            const randomIndex =Math.floor(Math.random() * reelSymbols.length);
+            const selectedSymbol = reelSymbols[randomIndex];
+            reels[i].push(selectedSymbol);
+            reelSymbols.splice(randomIndex,1);
+        }
+    }
+
+    return reels;
+}
+
+const reels = spin();
+console.log(reels);
 
 let numberOflines = getNumberOfLines();
 if (numberOflines !== null) {
