@@ -93,7 +93,7 @@ const spin = () =>{
             symbols.push(symbol);
        }
     }
-    console.log(symbols);
+    
    
     const reels = []
     for (let i = 0;i < COLS;i++){
@@ -115,6 +115,7 @@ const transpose = (reels) =>{
     const rows = [];
 
     for(let i =0; i < ROWS ;i++){
+       
         rows.push([]);
 
         for(let j =0; j < COLS;j++){
@@ -125,15 +126,48 @@ const transpose = (reels) =>{
     return rows;
 }
 
+const printRows = (rows) =>{
+    for(const row of rows){
+        let rowString = "";
+
+        for(const [i,symbol] of rows.entries()){
+            rowString += `|${symbol}|\n`
+           
+        }
+
+        console.log(rowString);
+    }
+}
+
+const getWinnigs = (rows,bet,lines) =>{
+    let winnigs = 0;
+
+    for(let row =0; row < lines; row++){
+        const symbols = rows[row];
+        let allSame = true;
+
+        for(const symbol of symbols){
+            if(symbol != symbol[0]){
+                allSame = false;
+                break;
+            }
+        }
+
+        if(allSame){
+            winnigs += bet * SYMBOL_VALUES[symbols[0]];
+        }
+    }
+
+    return winnigs;
+}
 
 let numberOflines = getNumberOfLines();
 const bet = getBet(player.balance, numberOflines);
-console.log(bet)
 const reels = spin();
 const rows = transpose(reels);
+printRows(rows);
 
-console.log(reels);
-console.log(rows);
+
 
 
 
