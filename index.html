@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
 
-    <label for="deposit">Deposite</label>
-    <input id="deposit" type="number" required>
-    <button id="btn">Deposite</button>
+   <div class="container">
+       <div class="slotbox">
+            <p id="error-messaeg"></p>
+            <h1>Slot Machine</h1>
+            
+            <h3 id=gameCash></h3>
+            <label for="deposit">Deposit</label>
+            <input id="deposit" type="number" required>
+            <button id="btn">Deposit</button>
 
-    <form id="betForm">
-        <label for="bet">Bet</label>
-        <input id="bet" type="number" required>
-        
-        <label for="numberSlot">Number Slot</label>
-        <input id="numberSlot" type="text" required>
-        
-        <button type="submit">Odeslat</button>
-    </form>
+            <form id="betForm">
+                <label for="bet">Bet</label>
+                <input id="bet" type="number" required>
+                
+                <label for="numberSlot">Number Slot</label>
+                <input id="numberSlot" type="text" required>
+                
+                <button type="submit">Odeslat</button>
+            </form>
+
+            <div class="slotContainer"></div>
+       </div>
+   </div>
     
     <script src="slot.js"></script>
 </body>
