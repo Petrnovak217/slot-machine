@@ -1,6 +1,6 @@
 const getDepositeBtn = document.getElementById("btn");
 document.getElementById("betForm").addEventListener("submit", game);
-const error = document.getElementById("error-messaeg");
+const error = document.getElementById("error-message");
 const slotContainer = document.querySelector(".slotContainer");
 const depositCapital = document.getElementById("gameCash");
 const winLoseContainer = document.querySelector(".win-lose-conatiner");
@@ -57,6 +57,7 @@ getDepositeBtn.addEventListener("click", () => {
     player.deposit();
 });
 
+/* Získává počet aktivních linií, kontroluje jejich platnost (1–3) a vrací hodnotu nebo chybu. */
 const getNumberOfLines = () => {
     const lines = document.getElementById("numberSlot").value; 
     let numberOflines = Number(lines);
@@ -70,11 +71,12 @@ const getNumberOfLines = () => {
     }
 };
 
+/* Nastavuje a ověřuje sázku hráče, odečítá ji ze zůstatku a zobrazuje výsledek. */
 const getBet = (balance, lines) => {
     const betInput = document.getElementById("bet").value; 
     let numberOfBet = Number(parseFloat(betInput).toFixed(2));  
 
-    // Kontrola, zda hráč má dostatek peněz před odečtením
+    
     if (!isNaN(numberOfBet) && numberOfBet > 0 ) {
         if (player.balance - numberOfBet >= 0 && numberOfBet <= balance/lines) {  
             player.balance -= numberOfBet * lines;  
@@ -91,6 +93,11 @@ const getBet = (balance, lines) => {
     }
 };
 
+/* Náhodně generuje válce slotového automatu.
+   - Vytvoří seznam symbolů na základě jejich počtu.
+   - Pro každý válec vybírá náhodné symboly bez opakování.
+   - Vrací matici válců se zamíchanými symboly. 
+*/
 const spin = () =>{
     const symbols = [];
 
@@ -117,6 +124,7 @@ const spin = () =>{
     return reels;
 }
 
+/* Převádí válce na řádky otočením matice. */
 const transpose = (reels) =>{
     const rows = []; 
 
@@ -132,7 +140,7 @@ const transpose = (reels) =>{
     return rows;
 }
 
-
+/* Vykreslí herní řádky do HTML s formátovanými symboly. */
 const printRows = (rows) =>{
     let fullString = "";
 
@@ -149,7 +157,10 @@ const printRows = (rows) =>{
     slotContainer.innerHTML = fullString; 
 };
 
-
+/* Vypočítává výhry hráče podle aktivních linií.
+   - Kontroluje, zda všechny symboly v řádku jsou stejné.
+   - Označuje výherní symboly vizuálním efektem.
+   - Přidává výhry do hráčova zůstatku a vrací částku. */
 const getWinnings = (rows, bet, lines) => {
     let winnings = 0;
 
@@ -176,7 +187,10 @@ const getWinnings = (rows, bet, lines) => {
     return winnings;
 };
 
-
+/* Spouští jedno kolo hry:
+   - Získává počet linií a sázku.
+   - Roztočí válce, převede je na řádky a zobrazí výsledek.
+   - Vypočítá výhru a zobrazí hráči. */
 function game(event) {
     event.preventDefault(); 
 
