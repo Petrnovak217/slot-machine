@@ -19,6 +19,7 @@ class Player {
         if (!isNaN(numberDepositeAmount) && numberDepositeAmount > 0) {  
             this.balance += Number(numberDepositeAmount);
             depositCapital.innerHTML = this.balance;
+            error.textContent = "";
 
         } else {
             error.textContent = "Invalid deposit amount, try again";
@@ -33,18 +34,18 @@ const COLS = 3;
 
 //How many symbols are there in the slots
 const SYMBOLS_COUNT = {
-    "A":2,
-    "B":4,
-    "C":6,
-    "D":8
+    "A":4,
+    "B":8,
+    "C":12,
+    "D":16
 } 
 
 //multiplying values ​​in a slot
 
 const SYMBOL_VALUES = {
-    "A":2,
-    "B":4,
-    "C":3,
+    "A":50,
+    "B":8,
+    "C":4,
     "D":2
 }
 
@@ -59,9 +60,10 @@ getDepositeBtn.addEventListener("click", () => {
 const getNumberOfLines = () => {
     const lines = document.getElementById("numberSlot").value; 
     let numberOflines = Number(lines);
-
+    error.textContent = "";
     if (!isNaN(numberOflines) && numberOflines > 0 && numberOflines <= 3) {    
         return numberOflines;
+       
     } else {
         error.textContent = "Neplatné číslo dodržte rozsah (1-3)";
         return null;
@@ -78,6 +80,7 @@ const getBet = (balance, lines) => {
             player.balance -= numberOfBet * lines;  
             depositCapital.innerHTML = player.balance;
             return numberOfBet;
+            error.textContent = "";
         } else {
             error.textContent = "Nedostatečný zůstatek! Nemůžeš vsadit tolik.";
             return null;
@@ -115,7 +118,7 @@ const spin = () =>{
 }
 
 const transpose = (reels) =>{
-    const rows = [];
+    const rows = []; 
 
     for(let i =0; i < ROWS ;i++){
        
